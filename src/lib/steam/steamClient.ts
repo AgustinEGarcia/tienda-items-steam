@@ -23,75 +23,84 @@ export async function fetchRawSteamInventory(
   appId: number = 730,
   contextId: number = 2
 ): Promise<SteamFetchResult> {
-  const url = `https://steamcommunity.com/inventory/${steamId}/${appId}/${contextId}?l=spanish&count=5000`;
+  const countsToTry = [2000, 1000, 500];
+  let lastError = 'No se pudo obtener el inventario desde Steam';
 
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 12000); // 12s timeout
+  for (const count of countsToTry) {
+    const url = `https://steamcommunity.com/inventory/${steamId}/${appId}/${contextId}?l=spanish&count=${count}`;
 
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'User-Agent': STEAM_USER_AGENT,
-        Accept: 'application/json, text/plain, */*',
-        'Accept-Language': 'es-ES,es;q=0.9,en;q=0.8',
-        Referer: 'https://steamcommunity.com/',
-      },
-      signal: controller.signal,
-      cache: 'no-store',
-    });
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 12000); // 12s timeout
 
-    clearTimeout(timeoutId);
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'User-Agent': STEAM_USER_AGENT,
+          Accept: 'application/json, text/plain, */*',
+          'Accept-Language': 'es-ES,es;q=0.9,en;q=0.8',
+          Referer: `https://steamcommunity.com/profiles/${steamId}/inventory/`,
+        },
+        signal: controller.signal,
+        cache: 'no-store',
+      });
 
-    if (response.status === 429) {
+      clearTimeout(timeoutId);
+
+      if (response.status === 429) {
+        return {
+          success: false,
+          status: 429,
+          isRateLimited: true,
+          error: 'Steam Rate Limit excedido (HTTP 429)',
+        };
+      }
+
+      if (response.status === 403 || response.status === 401) {
+        return {
+          success: false,
+          status: response.status,
+          isPrivate: true,
+          error: 'El perfil o inventario de esta cuenta es privado en Steam',
+        };
+      }
+
+      // Si Steam rechaza con 400 (Bad Request por count excesivo), probar con el siguiente count menor
+      if (response.status === 400 && count !== countsToTry[countsToTry.length - 1]) {
+        continue;
+      }
+
+      if (!response.ok) {
+        lastError = `Steam respondió con código HTTP ${response.status}`;
+        continue;
+      }
+
+      const json = await response.json();
+
+      // Si Steam devuelve { null } o { success: false }
+      if (!json || json.success === 0 || json.error) {
+        return {
+          success: false,
+          status: 200,
+          isPrivate: true,
+          error: json?.error || 'Inventario no accesible o privado',
+        };
+      }
+
       return {
-        success: false,
-        status: 429,
-        isRateLimited: true,
-        error: 'Steam Rate Limit excedido (HTTP 429)',
-      };
-    }
-
-    if (response.status === 403 || response.status === 401) {
-      return {
-        success: false,
-        status: response.status,
-        isPrivate: true,
-        error: 'El perfil o inventario de esta cuenta es privado en Steam',
-      };
-    }
-
-    if (!response.ok) {
-      return {
-        success: false,
-        status: response.status,
-        error: `Steam respondió con código HTTP ${response.status}`,
-      };
-    }
-
-    const json = await response.json();
-
-    // Si Steam devuelve { null } o { success: false }
-    if (!json || json.success === 0 || json.error) {
-      return {
-        success: false,
+        success: true,
         status: 200,
-        isPrivate: true,
-        error: json?.error || 'Inventario no accesible o privado',
+        data: json,
       };
+    } catch (err: unknown) {
+      const errorMsg = err instanceof Error ? err.message : 'Error desconocido';
+      lastError = `Fallo de conexión al consultar Steam: ${errorMsg}`;
     }
-
-    return {
-      success: true,
-      status: 200,
-      data: json,
-    };
-  } catch (err: unknown) {
-    const errorMsg = err instanceof Error ? err.message : 'Error desconocido';
-    return {
-      success: false,
-      status: 500,
-      error: `Fallo de conexión al consultar Steam: ${errorMsg}`,
-    };
   }
+
+  return {
+    success: false,
+    status: 400,
+    error: lastError,
+  };
 }
