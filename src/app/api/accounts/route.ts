@@ -104,7 +104,11 @@ export async function POST(request: Request) {
       }
       console.error('Error al insertar cuenta:', insertError);
       return NextResponse.json(
-        { error: 'Error al registrar la cuenta en la base de datos' },
+        {
+          error: `Error al registrar la cuenta: ${
+            insertError.message || insertError.details || 'Error en base de datos'
+          }`,
+        },
         { status: 500 }
       );
     }

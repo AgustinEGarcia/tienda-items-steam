@@ -67,3 +67,17 @@ CREATE TABLE IF NOT EXISTS price_cache (
 -- Índices para búsqueda rápida y purga por expiración
 CREATE INDEX IF NOT EXISTS idx_inventory_cache_expires ON inventory_cache (expires_at);
 CREATE INDEX IF NOT EXISTS idx_price_cache_expires ON price_cache (expires_at);
+
+-- 5. Permisos y Políticas de Seguridad
+-- Como la aplicación opera exclusivamente mediante Route Handlers en backend autenticados por contraseña,
+-- deshabilitamos RLS para permitir operaciones fluidas desde el servidor y otorgamos permisos completos.
+ALTER TABLE accounts DISABLE ROW LEVEL SECURITY;
+ALTER TABLE settings DISABLE ROW LEVEL SECURITY;
+ALTER TABLE inventory_cache DISABLE ROW LEVEL SECURITY;
+ALTER TABLE price_cache DISABLE ROW LEVEL SECURITY;
+
+GRANT ALL ON TABLE accounts TO anon, authenticated, service_role;
+GRANT ALL ON TABLE settings TO anon, authenticated, service_role;
+GRANT ALL ON TABLE inventory_cache TO anon, authenticated, service_role;
+GRANT ALL ON TABLE price_cache TO anon, authenticated, service_role;
+
