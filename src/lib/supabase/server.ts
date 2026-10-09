@@ -1,6 +1,7 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { Database } from '@/types/database';
 import { env } from '@/lib/env';
+import { cleanSupabaseUrl } from '@/lib/supabase/urlHelper';
 
 let serverClientInstance: SupabaseClient<Database> | null = null;
 
@@ -9,7 +10,7 @@ export function getSupabaseServerClient(): SupabaseClient<Database> {
     return serverClientInstance;
   }
 
-  const supabaseUrl = env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseUrl = cleanSupabaseUrl(env.NEXT_PUBLIC_SUPABASE_URL);
   const supabaseKey =
     env.SUPABASE_SERVICE_ROLE_KEY ||
     env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
