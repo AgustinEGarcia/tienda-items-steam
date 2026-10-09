@@ -36,4 +36,17 @@ describe('parseEnv', () => {
 
     expect(() => parseEnv(invalidConfig)).toThrowError(/al menos 4 caracteres/);
   });
+
+  it('debe aceptar SUPABASE_URL y SUPABASE_ANON_KEY como alias', () => {
+    const aliasConfig = {
+      SUPABASE_URL: 'https://test-alias.supabase.co',
+      SUPABASE_ANON_KEY: 'test-alias-key',
+      ADMIN_PASSWORD: 'password123',
+    };
+
+    const result = parseEnv(aliasConfig);
+    expect(result.NEXT_PUBLIC_SUPABASE_URL).toBe('https://test-alias.supabase.co');
+    expect(result.NEXT_PUBLIC_SUPABASE_ANON_KEY).toBe('test-alias-key');
+  });
 });
+

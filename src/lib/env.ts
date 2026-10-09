@@ -4,11 +4,13 @@ const envSchema = z.object({
   NEXT_PUBLIC_SUPABASE_URL: z
     .string()
     .url('NEXT_PUBLIC_SUPABASE_URL debe ser una URL válida')
-    .default('https://placeholder.supabase.co'),
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: z
+    .optional(),
+  SUPABASE_URL: z
     .string()
-    .min(1, 'NEXT_PUBLIC_SUPABASE_ANON_KEY es requerida')
-    .default('placeholder-anon-key'),
+    .url('SUPABASE_URL debe ser una URL válida')
+    .optional(),
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().optional(),
+  SUPABASE_ANON_KEY: z.string().optional(),
   SUPABASE_SERVICE_ROLE_KEY: z.string().optional(),
   ADMIN_PASSWORD: z
     .string()
@@ -23,6 +25,14 @@ const envSchema = z.object({
   STEAM_CACHE_TTL_MINUTES: z.coerce.number().int().positive().default(60),
   MAX_MANAGED_ACCOUNTS: z.coerce.number().int().positive().default(5),
   STEAM_PRICE_DELAY_MS: z.coerce.number().int().positive().default(2500),
+}).transform((val) => {
+  return {
+    ...val,
+    NEXT_PUBLIC_SUPABASE_URL:
+      val.NEXT_PUBLIC_SUPABASE_URL || val.SUPABASE_URL || 'https://placeholder.supabase.co',
+    NEXT_PUBLIC_SUPABASE_ANON_KEY:
+      val.NEXT_PUBLIC_SUPABASE_ANON_KEY || val.SUPABASE_ANON_KEY || 'placeholder-anon-key',
+  };
 });
 
 export type Env = z.infer<typeof envSchema>;
