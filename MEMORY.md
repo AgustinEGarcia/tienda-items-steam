@@ -2,10 +2,9 @@
 Memoria del proyecto entre sesiones. Máximo ~50 líneas: resumir o eliminar lo que ya no aporte.
 
 ## Estado actual
-- Spec 001 (Visualización, Tasación y Gestión Multi-cuenta CS2) 100% IMPLEMENTADA.
-- 19 tareas atómicas completadas en 5 fases (Setup, Dominio TDD, Backend, Frontend y Validación E2E).
-- 43 tests unitarios y de integración pasando en verde (100% cobertura).
-- Next.js 16 compilando en limpio (`npm run build`) para despliegue serverless costo cero en Vercel.
+- Desplegado y operativo en producción en Vercel (`tienda-items-steam.vercel.app`) y Supabase.
+- Base de datos operativa con 4 tablas (`accounts`, `settings`, `inventory_cache`, `price_cache`).
+- 48 tests pasando en Vitest y Next.js 16 compilando de manera óptima.
 
 ## Decisiones (y por qué)
 - Next.js Monolito en Vercel: Elimina CORS y cold-starts cruzados entre frontend y backend.
@@ -16,10 +15,11 @@ Memoria del proyecto entre sesiones. Máximo ~50 líneas: resumir o eliminar lo 
 - Inmunidad Steam: Read-Only anónimo con SteamID64 público. Sin credenciales ni claves privadas.
 
 ## Aprendizajes y errores a evitar
-- Valve bloquea IPs con 429 si se superan 20-30 peticiones/min en `/market/priceoverview`.
-- Servidores serverless pierden la memoria RAM; la caché debe guardarse en Supabase con TTL.
+- Valve bloquea con HTTP 400 si se solicita `count=5000` en el endpoint de inventario comunitario; el límite seguro es 2000/1000/500 con header `Referer` apuntando al perfil.
+- Desactivar RLS u otorgar permisos explícitos en Supabase para evitar bloqueos en operaciones backend.
+- Servidores serverless pierden memoria RAM; la caché se preserva en Supabase con TTL.
 
 ## Próximos pasos
 - [x] T1-T19: Todas las tareas de la Spec 001 implementadas y verificadas.
-- [ ] Configurar credenciales reales de Supabase en `.env.local` y correr script `supabase/schema.sql`.
-- [ ] Probar flujo completo con cuentas reales de Steam en entorno local o Vercel.
+- [x] Esquema ejecutado en Supabase y variables configuradas en Vercel.
+- [ ] Vincular cuentas públicas y monitorear visualización del catálogo consolidado.
