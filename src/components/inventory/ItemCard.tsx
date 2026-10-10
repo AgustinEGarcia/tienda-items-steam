@@ -82,8 +82,8 @@ export function ItemCard({ item, onPriceUpdate }: ItemCardProps) {
       {/* Cabecera de la Tarjeta (Badges de Cuenta y Exterior) */}
       <div className="p-3.5 pb-0 flex items-center justify-between gap-2 z-10">
         {item.account_alias ? (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-900/90 border border-slate-800 text-[10px] font-semibold text-slate-300">
-            <Shield className="w-2.5 h-2.5 text-amber-400" />
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-purple-950/40 border border-purple-900/40 text-[10px] font-semibold text-purple-200">
+            <Shield className="w-2.5 h-2.5 text-purple-400" />
             <span className="truncate max-w-[90px]">{item.account_alias}</span>
           </span>
         ) : (
@@ -91,7 +91,7 @@ export function ItemCard({ item, onPriceUpdate }: ItemCardProps) {
         )}
 
         {item.exterior ? (
-          <span className="px-2 py-0.5 rounded-md bg-slate-800/70 text-[10px] font-bold text-slate-300 border border-slate-700/50">
+          <span className="px-2 py-0.5 rounded-md bg-purple-950/40 text-[10px] font-bold text-purple-300/80 border border-purple-900/40">
             {item.exterior}
           </span>
         ) : (
@@ -119,7 +119,7 @@ export function ItemCard({ item, onPriceUpdate }: ItemCardProps) {
             loading="lazy"
           />
         ) : (
-          <div className="w-20 h-20 rounded-xl bg-slate-900 flex items-center justify-center text-slate-600">
+          <div className="w-20 h-20 rounded-xl bg-purple-950/30 flex items-center justify-center text-purple-400">
             <Layers className="w-8 h-8" />
           </div>
         )}
@@ -128,11 +128,11 @@ export function ItemCard({ item, onPriceUpdate }: ItemCardProps) {
       {/* Información del Ítem */}
       <div className="px-3.5 pb-3 z-10 flex-1 flex flex-col justify-end">
         <div className="mb-2.5">
-          <p className="text-[11px] font-semibold text-slate-400 truncate">
+          <p className="text-[11px] font-semibold text-purple-300/60 truncate">
             {weaponName}
           </p>
           <h3
-            className="text-sm font-black text-white tracking-tight truncate leading-tight group-hover:text-amber-400 transition-colors"
+            className="text-sm font-black text-white tracking-tight truncate leading-tight group-hover:text-purple-300 transition-colors"
             title={item.market_hash_name}
           >
             {skinName}
@@ -140,18 +140,18 @@ export function ItemCard({ item, onPriceUpdate }: ItemCardProps) {
         </div>
 
         {/* Sección de Doble Precio */}
-        <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between gap-2">
+        <div className="pt-2 border-t border-purple-900/30 flex items-center justify-between gap-2">
           {priceUsd !== null && priceUsd !== undefined ? (
             <div className="flex-1">
-              <div className="text-[11px] text-slate-400 font-medium">
+              <div className="text-[11px] text-purple-300/60 font-medium">
                 {formatUsd(priceUsd)}
               </div>
-              <div className="text-sm font-black text-amber-300 font-mono tracking-tight">
+              <div className="text-sm font-black text-purple-200 font-mono tracking-tight">
                 {formatArs(priceUsd)}
               </div>
             </div>
           ) : !item.marketable ? (
-            <div className="text-[11px] text-slate-500 italic py-1">
+            <div className="text-[11px] text-purple-400/50 italic py-1">
               No comercializable
             </div>
           ) : (
@@ -161,7 +161,7 @@ export function ItemCard({ item, onPriceUpdate }: ItemCardProps) {
                   {priceError}
                 </div>
               ) : (
-                <div className="text-[11px] text-slate-500 font-medium">
+                <div className="text-[11px] text-purple-400/60 font-medium">
                   Sin cotizar
                 </div>
               )}
@@ -181,8 +181,8 @@ export function ItemCard({ item, onPriceUpdate }: ItemCardProps) {
               }
               className={`p-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1 ${
                 priceUsd !== null && priceUsd !== undefined
-                  ? 'bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800'
-                  : 'bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold shadow-md shadow-amber-500/20'
+                  ? 'bg-purple-950/40 hover:bg-purple-900/60 text-purple-300/80 hover:text-white border border-purple-900/40'
+                  : 'bg-purple-600 hover:bg-purple-500 text-white font-bold shadow-md shadow-purple-600/30 ring-1 ring-purple-400/40'
               }`}
             >
               <RefreshCw

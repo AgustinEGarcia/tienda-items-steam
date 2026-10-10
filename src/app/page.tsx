@@ -23,7 +23,7 @@ const DEMO_ITEMS: SteamItem[] = [
     assetid: 'demo-1',
     classid: 'c1',
     instanceid: '0',
-    amount: 1,
+    amount: '1',
     market_hash_name: '★ Karambit | Fade (Factory New)',
     name: '★ Karambit | Fade',
     type: 'Cuchillo extraordinario',
@@ -35,13 +35,13 @@ const DEMO_ITEMS: SteamItem[] = [
     marketable: true,
     price_usd: 1980.5,
     account_alias: 'Cuenta Principal',
-    steam_id: '76561198000000001',
+    account_steam_id: '76561198000000001',
   },
   {
     assetid: 'demo-2',
     classid: 'c2',
     instanceid: '0',
-    amount: 1,
+    amount: '1',
     market_hash_name: 'AWP | Neo-Noir (Factory New)',
     name: 'AWP | Neo-Noir',
     type: 'Rifle de francotirador encubierto',
@@ -53,13 +53,13 @@ const DEMO_ITEMS: SteamItem[] = [
     marketable: true,
     price_usd: 48.75,
     account_alias: 'Cuenta Principal',
-    steam_id: '76561198000000001',
+    account_steam_id: '76561198000000001',
   },
   {
     assetid: 'demo-3',
     classid: 'c3',
     instanceid: '0',
-    amount: 1,
+    amount: '1',
     market_hash_name: 'AK-47 | Bloodsport (Field-Tested)',
     name: 'AK-47 | Bloodsport',
     type: 'Rifle encubierto',
@@ -71,13 +71,13 @@ const DEMO_ITEMS: SteamItem[] = [
     marketable: true,
     price_usd: 125.0,
     account_alias: 'Cuenta Secundaria',
-    steam_id: '76561198000000002',
+    account_steam_id: '76561198000000002',
   },
   {
     assetid: 'demo-4',
     classid: 'c4',
     instanceid: '0',
-    amount: 1,
+    amount: '1',
     market_hash_name: 'M4A4 | The Emperor (Minimal Wear)',
     name: 'M4A4 | The Emperor',
     type: 'Rifle encubierto',
@@ -89,13 +89,13 @@ const DEMO_ITEMS: SteamItem[] = [
     marketable: true,
     price_usd: 78.3,
     account_alias: 'Cuenta Principal',
-    steam_id: '76561198000000001',
+    account_steam_id: '76561198000000001',
   },
   {
     assetid: 'demo-5',
     classid: 'c5',
     instanceid: '0',
-    amount: 1,
+    amount: '1',
     market_hash_name: 'USP-S | Printstream (Field-Tested)',
     name: 'USP-S | Printstream',
     type: 'Pistola encubierta',
@@ -107,13 +107,13 @@ const DEMO_ITEMS: SteamItem[] = [
     marketable: true,
     price_usd: 62.4,
     account_alias: 'Cuenta Secundaria',
-    steam_id: '76561198000000002',
+    account_steam_id: '76561198000000002',
   },
   {
     assetid: 'demo-6',
     classid: 'c6',
     instanceid: '0',
-    amount: 1,
+    amount: '1',
     market_hash_name: 'Glock-18 | Water Elemental (Factory New)',
     name: 'Glock-18 | Water Elemental',
     type: 'Pistola clasificada',
@@ -125,7 +125,7 @@ const DEMO_ITEMS: SteamItem[] = [
     marketable: true,
     price_usd: 14.8,
     account_alias: 'Cuenta Secundaria',
-    steam_id: '76561198000000002',
+    account_steam_id: '76561198000000002',
   },
 ];
 
@@ -138,6 +138,16 @@ export default function CatalogPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<SortOption>('price_desc');
   const [errorNotice, setErrorNotice] = useState<string | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    fetch('/api/auth/me')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.authenticated) setIsAdmin(true);
+      })
+      .catch(() => setIsAdmin(false));
+  }, []);
 
   const loadDemoItems = () => {
     const demoAccounts: AccountOption[] = [
@@ -337,31 +347,32 @@ export default function CatalogPage() {
           onSelectAccount={setSelectedSteamId}
           onRefreshAll={() => loadInventories(true)}
           isRefreshing={isRefreshing}
+          isAdmin={isAdmin}
         />
       </section>
 
       {/* Barra de Controles (Buscador y Ordenamiento) */}
-      <section className="glass-panel p-4 rounded-2xl border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <section className="glass-panel p-4 rounded-2xl border border-purple-900/30 flex flex-col sm:flex-row items-center justify-between gap-4">
         {/* Input Buscador */}
         <div className="relative w-full sm:w-80">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <Search className="w-4 h-4 text-purple-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
             placeholder="Buscar por skin, arma o tipo..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-900/90 border border-slate-800 text-xs text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-amber-500/60 focus:ring-1 focus:ring-amber-500/30 transition-all"
+            className="w-full pl-10 pr-4 py-2 rounded-xl bg-purple-950/20 border border-purple-900/40 text-xs text-purple-100 placeholder:text-purple-400/50 focus:outline-none focus:border-purple-500/60 focus:ring-1 focus:ring-purple-500/30 transition-all"
           />
         </div>
 
         {/* Selector de Orden */}
         <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
-          <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
-          <span className="text-xs text-slate-400 font-medium hidden sm:inline">Ordenar por:</span>
+          <ArrowUpDown className="w-3.5 h-3.5 text-purple-400" />
+          <span className="text-xs text-purple-300/70 font-medium hidden sm:inline">Ordenar por:</span>
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as SortOption)}
-            className="px-3 py-2 rounded-xl bg-slate-900/90 border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-amber-500/60 font-medium"
+            className="px-3 py-2 rounded-xl bg-purple-950/30 border border-purple-900/40 text-xs text-purple-200 focus:outline-none focus:border-purple-500/60 font-medium"
           >
             <option value="price_desc">Mayor Precio (USD)</option>
             <option value="price_asc">Menor Precio (USD)</option>
@@ -374,10 +385,10 @@ export default function CatalogPage() {
       {/* Grilla de Ítems */}
       <section>
         {isLoading ? (
-          <div className="glass-panel p-16 rounded-2xl text-center flex flex-col items-center justify-center gap-3 border border-slate-800">
-            <RefreshCw className="w-8 h-8 text-amber-400 animate-spin" />
+          <div className="glass-panel p-16 rounded-2xl text-center flex flex-col items-center justify-center gap-3 border border-purple-900/30">
+            <RefreshCw className="w-8 h-8 text-purple-400 animate-spin" />
             <p className="text-sm font-bold text-white">Sincronizando inventarios con Steam...</p>
-            <p className="text-xs text-slate-400">Consultando tabla de caché y datos comunitarios</p>
+            <p className="text-xs text-purple-300/60">Consultando tabla de caché y datos comunitarios</p>
           </div>
         ) : accounts.length === 0 ? (
           <div className="glass-panel p-16 rounded-2xl text-center flex flex-col items-center justify-center gap-4 border border-purple-900/30">
@@ -385,29 +396,35 @@ export default function CatalogPage() {
               <Layers className="w-7 h-7" />
             </div>
             <div>
-              <h2 className="text-lg font-black text-white">No hay cuentas vinculadas</h2>
+              <h2 className="text-lg font-black text-white">
+                {isAdmin ? 'No hay cuentas vinculadas' : 'Catálogo en Preparación'}
+              </h2>
               <p className="text-xs text-purple-300/70 mt-1 max-w-md mx-auto">
-                Registra tu primera cuenta mediante su identificador público SteamID64 (17 dígitos) o pulsa abajo para probar la interfaz con skins reales de muestra.
+                {isAdmin
+                  ? 'Registra tu primera cuenta mediante su identificador público SteamID64 (17 dígitos) o pulsa abajo para probar la interfaz con skins de muestra.'
+                  : 'El catálogo se encuentra actualizando sus inventarios públicos de CS2. Vuelve a consultar en unos instantes.'}
               </p>
             </div>
-            <div className="flex flex-wrap items-center justify-center gap-3">
-              <button
-                type="button"
-                onClick={loadDemoItems}
-                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-500 hover:to-violet-500 text-white text-xs font-bold transition-all shadow-lg shadow-purple-600/30 ring-1 ring-purple-400/40 flex items-center gap-2"
-              >
-                <span>✨ Cargar Skins de Demostración</span>
-              </button>
-              <Link
-                href="/admin"
-                className="px-5 py-2.5 rounded-xl bg-purple-950/60 hover:bg-purple-900/70 border border-purple-800/40 text-purple-200 text-xs font-bold transition-all"
-              >
-                Ir a Administración y Agregar Cuenta
-              </Link>
-            </div>
+            {isAdmin && (
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                <button
+                  type="button"
+                  onClick={loadDemoItems}
+                  className="px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition-all shadow-lg shadow-purple-600/30 ring-1 ring-purple-400/40 flex items-center gap-2"
+                >
+                  <span>✨ Cargar Skins de Demostración</span>
+                </button>
+                <Link
+                  href="/admin"
+                  className="px-5 py-2.5 rounded-xl bg-purple-950/60 hover:bg-purple-900/70 border border-purple-800/40 text-purple-200 text-xs font-bold transition-all"
+                >
+                  Ir a Administración y Agregar Cuenta
+                </Link>
+              </div>
+            )}
           </div>
         ) : filteredAndSortedItems.length === 0 ? (
-          <div className="glass-panel p-12 rounded-2xl text-center border border-slate-800 text-slate-400 text-xs">
+          <div className="glass-panel p-12 rounded-2xl text-center border border-purple-900/30 text-purple-300/60 text-xs">
             No se encontraron ítems que coincidan con la búsqueda o la cuenta seleccionada.
           </div>
         ) : (
