@@ -3,7 +3,6 @@ import { Outfit } from 'next/font/google';
 import './globals.css';
 import { CurrencyProvider } from '@/context/CurrencyContext';
 import { Navbar } from '@/components/layout/Navbar';
-import { ThemePreviewBar } from '@/components/layout/ThemePreviewBar';
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -25,7 +24,6 @@ export default function RootLayout({
   return (
     <html lang="es" className={`${outfit.variable} dark`}>
       <body className="min-h-screen flex flex-col antialiased selection:bg-purple-600 selection:text-white font-sans">
-        <ThemePreviewBar />
         <CurrencyProvider>
           <Navbar />
           <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
