@@ -3,26 +3,25 @@ Memoria del proyecto entre sesiones. Máximo ~50 líneas: resumir o eliminar lo 
 
 ## Estado actual
 - Desplegado y operativo en producción en Vercel (`tienda-items-steam.vercel.app`) y localmente en `http://localhost:3000`.
-- Sistema de diseño UI violeta implementado con 3 opciones seleccionables en vivo.
-- Skill `ui-design-system` creada en `agents/skills/ui-design-system/SKILL.md`.
+- Sistema de diseño UI violeta puro implementado con 4 opciones (Amethyst, Synthwave, Iris, Pitch Black).
+- Aislamiento visual de controles de administración completado (selectores, sincronización y demo ocultos para visitantes públicos).
+- Skill `ui-design-system` actualizada en `agents/skills/ui-design-system/SKILL.md`.
 - 48 tests pasando en Vitest y Next.js 16 compilando de manera óptima.
 
 ## Decisiones (y por qué)
 - Next.js Monolito en Vercel: Elimina CORS y cold-starts cruzados entre frontend y backend.
-- Sistema de Diseño Violeta Multitema: Variables CSS dinámicas para previsualizar Cyberpunk Neon, Deep Velvet y Obsidian Ultraviolet en tiempo real.
+- Paletas Violetas Puras: 100% libres de amarillos residuales; botones, píldoras y badges armonizados.
+- Aislamiento de Funciones Admin: Selector y sincronización accesibles únicamente bajo sesión autenticada.
 - Supabase PostgreSQL: Persistencia permanente y caché compartida con TTL 60m contra HTTP 429 de Steam.
 - Autenticación Admin: Clave maestra en `.env` con cookie HTTP-only (v1); Supabase Auth programado para v2.
-- Cap de 5 cuentas: Límite estricto en BD y código para control de cuota en fase inicial.
-- Precios On-Demand + Delay 2.5s: Cero ráfagas masivas hacia Valve; protección total de IP y cuentas.
 - Inmunidad Steam: Read-Only anónimo con SteamID64 público. Sin credenciales ni claves privadas.
 
 ## Aprendizajes y errores a evitar
 - Valve bloquea con HTTP 400 si se solicita `count=5000` en el endpoint de inventario comunitario; el límite seguro es 2000/1000/500 con header `Referer` apuntando al perfil.
 - Desactivar RLS u otorgar permisos explícitos en Supabase para evitar bloqueos en operaciones backend.
-- Servidores serverless pierden memoria RAM; la caché se preserva en Supabase con TTL.
 
 ## Próximos pasos
 - [x] T1-T19: Todas las tareas de la Spec 001 implementadas y verificadas.
 - [x] Esquema ejecutado en Supabase y variables configuradas en Vercel.
-- [x] Previsualización de los 3 temas violetas disponible en local y producción.
+- [x] 4 nuevas opciones violetas puras disponibles para evaluación local y en producción.
 - [ ] Definir el tema ganador con el usuario para dejarlo establecido como principal.
