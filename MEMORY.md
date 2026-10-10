@@ -2,12 +2,14 @@
 Memoria del proyecto entre sesiones. Máximo ~50 líneas: resumir o eliminar lo que ya no aporte.
 
 ## Estado actual
-- Desplegado y operativo en producción en Vercel (`tienda-items-steam.vercel.app`) y Supabase.
-- Base de datos operativa con 4 tablas (`accounts`, `settings`, `inventory_cache`, `price_cache`).
+- Desplegado y operativo en producción en Vercel (`tienda-items-steam.vercel.app`) y localmente en `http://localhost:3000`.
+- Sistema de diseño UI violeta implementado con 3 opciones seleccionables en vivo.
+- Skill `ui-design-system` creada en `agents/skills/ui-design-system/SKILL.md`.
 - 48 tests pasando en Vitest y Next.js 16 compilando de manera óptima.
 
 ## Decisiones (y por qué)
 - Next.js Monolito en Vercel: Elimina CORS y cold-starts cruzados entre frontend y backend.
+- Sistema de Diseño Violeta Multitema: Variables CSS dinámicas para previsualizar Cyberpunk Neon, Deep Velvet y Obsidian Ultraviolet en tiempo real.
 - Supabase PostgreSQL: Persistencia permanente y caché compartida con TTL 60m contra HTTP 429 de Steam.
 - Autenticación Admin: Clave maestra en `.env` con cookie HTTP-only (v1); Supabase Auth programado para v2.
 - Cap de 5 cuentas: Límite estricto en BD y código para control de cuota en fase inicial.
@@ -22,4 +24,5 @@ Memoria del proyecto entre sesiones. Máximo ~50 líneas: resumir o eliminar lo 
 ## Próximos pasos
 - [x] T1-T19: Todas las tareas de la Spec 001 implementadas y verificadas.
 - [x] Esquema ejecutado en Supabase y variables configuradas en Vercel.
-- [ ] Vincular cuentas públicas y monitorear visualización del catálogo consolidado.
+- [x] Previsualización de los 3 temas violetas disponible en local y producción.
+- [ ] Definir el tema ganador con el usuario para dejarlo establecido como principal.
