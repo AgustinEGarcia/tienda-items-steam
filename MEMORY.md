@@ -3,15 +3,15 @@ Memoria del proyecto entre sesiones. Máximo ~50 líneas: resumir o eliminar lo 
 
 ## Estado actual
 - Desplegado y operativo en producción en Vercel (`tienda-items-steam.vercel.app`) y localmente en `http://localhost:3000`.
-- Sistema de diseño UI violeta puro implementado con 4 opciones (Amethyst, Synthwave, Iris, Pitch Black).
-- Aislamiento visual de controles de administración completado (selectores, sincronización y demo ocultos para visitantes públicos).
-- Skill `ui-design-system` actualizada en `agents/skills/ui-design-system/SKILL.md`.
+- Diseño definitivo consolidado con **Royal Iris & Deep Slate** como tema oficial.
+- Barra temporal de pruebas removida; interfaz limpia y aislada para visitantes públicos.
+- Skill `ui-design-system` consolidada en `agents/skills/ui-design-system/SKILL.md`.
 - 48 tests pasando en Vitest y Next.js 16 compilando de manera óptima.
 
 ## Decisiones (y por qué)
 - Next.js Monolito en Vercel: Elimina CORS y cold-starts cruzados entre frontend y backend.
-- Paletas Violetas Puras: 100% libres de amarillos residuales; botones, píldoras y badges armonizados.
-- Aislamiento de Funciones Admin: Selector y sincronización accesibles únicamente bajo sesión autenticada.
+- Tema Oficial Royal Iris: Estética táctica inspirada en Valve UI/Steam Deck con fondo `#0d0c18`, acentos violeta imperial `#7c3aed`/`#6d28d9` y cristales ahumados.
+- Aislamiento de Funciones Admin: Sincronización manual de inventarios exclusiva para la pantalla `/admin`.
 - Supabase PostgreSQL: Persistencia permanente y caché compartida con TTL 60m contra HTTP 429 de Steam.
 - Autenticación Admin: Clave maestra en `.env` con cookie HTTP-only (v1); Supabase Auth programado para v2.
 - Inmunidad Steam: Read-Only anónimo con SteamID64 público. Sin credenciales ni claves privadas.
@@ -23,5 +23,5 @@ Memoria del proyecto entre sesiones. Máximo ~50 líneas: resumir o eliminar lo 
 ## Próximos pasos
 - [x] T1-T19: Todas las tareas de la Spec 001 implementadas y verificadas.
 - [x] Esquema ejecutado en Supabase y variables configuradas en Vercel.
-- [x] 4 nuevas opciones violetas puras disponibles para evaluación local y en producción.
-- [ ] Definir el tema ganador con el usuario para dejarlo establecido como principal.
+- [x] Tema definitivo Royal Iris consolidado en local y producción.
+- [ ] Vincular cuentas públicas en `/admin` y monitorear visualización del catálogo consolidado.
